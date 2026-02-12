@@ -1,4 +1,4 @@
-# react-native-country-picker
+# react-native-intl-country-picker
 
 RTL‑aware country picker for React Native with:
 - Arabic‑normalized search in RTL mode
@@ -11,9 +11,9 @@ RTL‑aware country picker for React Native with:
 Install from npm:
 
 ```bash
-npm install react-native-country-picker
+npm install react-native-intl-country-picker
 # or
-yarn add react-native-country-picker
+yarn add react-native-intl-country-picker
 ```
 
 ## Quick start
@@ -24,7 +24,7 @@ import { View, Button, Text } from 'react-native';
 import {
   CountryPickerModal,
   type NormalizedCountry,
-} from 'react-native-country-picker';
+} from 'react-native-intl-country-picker';
 
 export const Example = () => {
   const [visible, setVisible] = useState(false);

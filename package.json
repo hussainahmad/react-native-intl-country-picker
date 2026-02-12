@@ -1,5 +1,5 @@
 {
-  "name": "react-native-country-picker",
+  "name": "react-native-intl-country-picker",
   "version": "1.0.0",
   "description": "React Native country picker with RTL-friendly Arabic search, dialing-code search, and alphabet index.",
   "main": "dist/index.js",
@@ -37,11 +37,11 @@
   "author": "Your Name",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hussainahmad/react-native-country-picker"
+    "url": "https://github.com/hussainahmad/react-native-intl-country-picker"
   },
   "bugs": {
-    "url": "https://github.com/hussainahmad/react-native-country-picker/issues"
+    "url": "https://github.com/hussainahmad/react-native-intl-country-picker/issues"
   },
-  "homepage": "https://github.com/hussainahmad/react-native-country-picker#readme",
+  "homepage": "https://github.com/hussainahmad/react-native-intl-country-picker#readme",
   "license": "MIT"
 }
