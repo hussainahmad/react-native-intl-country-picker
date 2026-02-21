@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Country } from '../types';
-import { normalizeArabic } from '../utill/arabic';
+import { normalizeArabic } from '../util/arabic';
 
 export function useCountryFilter(countries: Country[], search: string, isRTL: boolean, type?: 'ar' | 'en') {
   return useMemo(() => {

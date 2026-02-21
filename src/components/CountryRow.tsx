@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, I18nManager, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import { Country } from '../types';
-import { flag } from '../utill/flag';
+import { flag } from '../util/flag';
 
 type CountryRowProps = {
   country: Country;

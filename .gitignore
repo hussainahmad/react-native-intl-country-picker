@@ -1,4 +1,3 @@
 node_modules
 
-# Local release marker (ignored so it is not published or committed)
-.release-local
+release.md

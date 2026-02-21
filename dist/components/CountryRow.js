@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, I18nManager, TouchableOpacity } from 'react-native';
-import { flag } from '../utill/flag';
+import { flag } from '../util/flag';
 const CountryRowComponent = ({ country, contentContainerStyle, onClose, onSelect, type }) => {
     const isRTL = I18nManager.isRTL;
     const displayName = type === 'en' ? country.englishName : isRTL ? country.name : country.englishName;

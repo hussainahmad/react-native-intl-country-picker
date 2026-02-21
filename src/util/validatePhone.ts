@@ -1,8 +1,8 @@
 import type { Country } from '../types';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
-
 const phoneUtil = PhoneNumberUtil.getInstance();
+
 /**
  * Validates a phone number for the given country using Google libphonenumber.
  * @param nationalNumber - Digits only (national number, no country code).
@@ -13,11 +13,12 @@ export function isValidPhoneNumber(
   nationalNumber: string,
   country: Country,
 ): boolean {
-  if (!nationalNumber || !country?.cca2 || !country?.callingCode) {
+  const code = country?.callingCode?.[0];
+  if (!nationalNumber || !country?.cca2 || !code) {
     return false;
   }
   try {
-    const full = `+${country.callingCode}${nationalNumber}`;
+    const full = `+${code}${nationalNumber}`;
     const parsed = phoneUtil.parse(full, country.cca2);
     return phoneUtil.isValidNumber(parsed);
   } catch {
@@ -32,11 +33,12 @@ export function isPossiblePhoneNumber(
   nationalNumber: string,
   country: Country,
 ): boolean {
-  if (!nationalNumber || !country?.cca2 || !country?.callingCode) {
+  const code = country?.callingCode?.[0];
+  if (!nationalNumber || !country?.cca2 || !code) {
     return false;
   }
   try {
-    const full = `+${country.callingCode}${nationalNumber}`;
+    const full = `+${code}${nationalNumber}`;
     const parsed = phoneUtil.parse(full, country.cca2);
     return phoneUtil.isPossibleNumber(parsed);
   } catch {

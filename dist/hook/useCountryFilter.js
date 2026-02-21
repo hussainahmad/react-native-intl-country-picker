@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { normalizeArabic } from '../utill/arabic';
+import { normalizeArabic } from '../util/arabic';
 export function useCountryFilter(countries, search, isRTL, type) {
     return useMemo(() => {
         const q = search.trim().toLowerCase();

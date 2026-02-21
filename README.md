@@ -95,6 +95,82 @@ const styles = StyleSheet.create({
 });
 ```
 
+### Phone validation: isValidPhoneNumber and onValidationChange
+
+Validation uses **google-libphonenumber**. You can:
+
+1. **Use `onValidationChange`** on `PhoneInput` to react whenever the number becomes valid or invalid (e.g. show an error message or enable/disable submit).
+
+2. **Use the exported `isValidPhoneNumber`** to validate a number yourself (e.g. before submit or when you have a `PhoneInputValue` from elsewhere).
+
+**Example: `onValidationChange` with error state**
+
+```tsx
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import {
+  PhoneInput,
+  type PhoneInputValue,
+} from 'react-native-intl-country-picker';
+
+export const PhoneInputWithValidation = () => {
+  const [phone, setPhone] = useState<PhoneInputValue | undefined>();
+  const [isValid, setIsValid] = useState(false);
+
+  return (
+    <View style={styles.screen}>
+      <Text style={styles.label}>Phone number</Text>
+      <PhoneInput
+        value={phone}
+        onChange={setPhone}
+        onValidationChange={setIsValid}
+        placeholder="Enter your number"
+        style={[styles.input, !isValid && phone?.phoneNumber ? styles.inputError : null]}
+      />
+      {phone?.phoneNumber && !isValid && (
+        <Text style={styles.errorText}>Please enter a valid phone number</Text>
+      )}
+      <Button title="Continue" disabled={!isValid} onPress={() => {}} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, padding: 16, justifyContent: 'center' },
+  label: { fontSize: 16, marginBottom: 8, fontWeight: '500' },
+  input: { marginBottom: 8 },
+  inputError: { borderColor: 'red' },
+  errorText: { color: 'red', fontSize: 12, marginBottom: 16 },
+});
+```
+
+**Example: using `isValidPhoneNumber` yourself**
+
+```tsx
+import {
+  PhoneInput,
+  isValidPhoneNumber,
+  isPossiblePhoneNumber,
+  type PhoneInputValue,
+} from 'react-native-intl-country-picker';
+
+// Validate when you have a PhoneInputValue (e.g. on form submit)
+function handleSubmit(value: PhoneInputValue) {
+  if (!isValidPhoneNumber(value.phoneNumber, value.country)) {
+    alert('Invalid phone number');
+    return;
+  }
+  // proceed with value.country and value.phoneNumber
+}
+
+// Or validate raw national number + country
+const valid = isValidPhoneNumber('3015551234', country);       // full validation
+const possible = isPossiblePhoneNumber('301555', country);    // length/format check only
+```
+
+- **`isValidPhoneNumber(nationalNumber, country)`** – returns `true` if the number is valid for that country (google-libphonenumber).
+- **`isPossiblePhoneNumber(nationalNumber, country)`** – returns `true` if the number could be valid (length/format), without full validation.
+
 ## Props
 
 ### CountryPickerModal
@@ -121,16 +197,28 @@ const styles = StyleSheet.create({
 
 ### PhoneInput
 
+`PhoneInput` supports **forwardRef**: pass a ref to focus the inner number input (e.g. when the user presses "Next" on the keyboard to move to the next field).
+
 | Prop | Type | Required | Description |
 |------|------|----------|-------------|
 | **value** | `PhoneInputValue \| undefined` | No | Controlled value `{ country, phoneNumber }`. |
 | **onChange** | `(value: PhoneInputValue) => void` | No | Called when country or number changes. |
 | **defaultCountryCode** | `string` | No | Initial country code (e.g. `"PK"`, `"US"`) when uncontrolled. |
 | **placeholder** | `string` | No | Placeholder for the number field (default: `"Phone number"`). |
+| **placeholderTextColor** | `string` | No | Placeholder text color (default: `"#999"`). |
 | **style** | `StyleProp<ViewStyle>` | No | Container style. |
-| **inputProps** | `TextInputProps` | No | Props passed to the number `TextInput` (except value, onChangeText, placeholder). |
+| **styles** | `PhoneInputStyles` | No | Full style overrides: `container`, `countryTrigger`, `flag`, `callingCode`, `input`. |
+| **containerStyle** | `StyleProp<ViewStyle>` | No | Alias for container style. |
+| **countryTriggerStyle** | `StyleProp<ViewStyle>` | No | Style for the country (flag + code) trigger. |
+| **flagStyle** | `StyleProp<TextStyle>` | No | Style for the flag emoji. |
+| **callingCodeStyle** | `StyleProp<TextStyle>` | No | Style for the "+1" / "+44" text. |
+| **inputStyle** | `StyleProp<TextStyle>` | No | Style for the number `TextInput`. |
+| **inputProps** | `TextInputProps` | No | Props passed to the number `TextInput` (except value, onChangeText, placeholder, ref). Use for `returnKeyType`, `onSubmitEditing`, etc. |
 | **countryLabelType** | `'ar' \| 'en'` | No | Label type for the country picker modal. |
-| **onValidationChange** | `(isValid: boolean) => void` | No | Called when validation result changes (uses google-libphonenumber). |
+| **onValidationChange** | `(isValid: boolean) => void` | No | Called whenever the phone number validity changes. See [Phone validation](#phone-validation-isvalidphonenumber-and-onvalidationchange) below. |
+| **renderCountryTrigger** | `(params: RenderCountryTriggerParams) => ReactNode` | No | Custom render for the country trigger (replaces default flag + code button). |
+
+**Focus next input (forwardRef):** Pass a ref and use `inputProps={{ returnKeyType: 'next', onSubmitEditing: () => nextInputRef.current?.focus() }}` so that when the user taps "Next", the next field is focused.
 
 ### Types
 
@@ -147,13 +235,22 @@ const styles = StyleSheet.create({
 - **country**: `Country` – selected country
 - **phoneNumber**: `string` – digits only (no country code)
 
+**PhoneInputStyles** (for `styles` prop)
+
+- **container**, **countryTrigger**, **flag**, **callingCode**, **input** – optional style overrides
+
+**RenderCountryTriggerParams** (for `renderCountryTrigger`)
+
+- **country**, **onPress**, **flagEmoji**, **callingCode** – use to build a custom country selector
+
 ## Development
 
-This package is written in TypeScript. To build and lint locally:
+This package is written in TypeScript. To build, lint, and test locally:
 
 ```bash
 npm run build
 npm run lint
+npm test
 ```
 
 ### Versioning and release

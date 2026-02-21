@@ -7,15 +7,17 @@ const phoneUtil = PhoneNumberUtil.getInstance();
  * @returns true if the number is valid for that region.
  */
 export function isValidPhoneNumber(nationalNumber, country) {
-    if (!nationalNumber || !(country === null || country === void 0 ? void 0 : country.cca2) || !(country === null || country === void 0 ? void 0 : country.callingCode)) {
+    var _a;
+    const code = (_a = country === null || country === void 0 ? void 0 : country.callingCode) === null || _a === void 0 ? void 0 : _a[0];
+    if (!nationalNumber || !(country === null || country === void 0 ? void 0 : country.cca2) || !code) {
         return false;
     }
     try {
-        const full = `+${country.callingCode}${nationalNumber}`;
+        const full = `+${code}${nationalNumber}`;
         const parsed = phoneUtil.parse(full, country.cca2);
         return phoneUtil.isValidNumber(parsed);
     }
-    catch (_a) {
+    catch (_b) {
         return false;
     }
 }
@@ -23,15 +25,17 @@ export function isValidPhoneNumber(nationalNumber, country) {
  * Checks if the number is possible (length/format could be valid) without full validation.
  */
 export function isPossiblePhoneNumber(nationalNumber, country) {
-    if (!nationalNumber || !(country === null || country === void 0 ? void 0 : country.cca2) || !(country === null || country === void 0 ? void 0 : country.callingCode)) {
+    var _a;
+    const code = (_a = country === null || country === void 0 ? void 0 : country.callingCode) === null || _a === void 0 ? void 0 : _a[0];
+    if (!nationalNumber || !(country === null || country === void 0 ? void 0 : country.cca2) || !code) {
         return false;
     }
     try {
-        const full = `+${country.callingCode}${nationalNumber}`;
+        const full = `+${code}${nationalNumber}`;
         const parsed = phoneUtil.parse(full, country.cca2);
         return phoneUtil.isPossibleNumber(parsed);
     }
-    catch (_a) {
+    catch (_b) {
         return false;
     }
 }
