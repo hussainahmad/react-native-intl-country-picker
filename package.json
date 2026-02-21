@@ -1,6 +1,6 @@
 {
   "name": "react-native-intl-country-picker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "React Native country picker with RTL-friendly Arabic search, dialing-code search, and alphabet index.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

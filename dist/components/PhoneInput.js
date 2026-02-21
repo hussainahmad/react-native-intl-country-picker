@@ -25,8 +25,8 @@ const defaultStyles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 12,
         paddingVertical: 10,
-        borderRightWidth: 1,
-        borderRightColor: '#ccc',
+        borderEndWidth: 1,
+        borderEndColor: '#ccc',
     },
     flag: {
         fontSize: 20,
