@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { NormalizedCountry } from '../types';
+import { Country } from '../types';
 import { normalizeArabic } from '../utill/arabic';
 
-export function useCountryFilter(countries: NormalizedCountry[], search: string, isRTL: boolean, type?: 'ar' | 'en') {
+export function useCountryFilter(countries: Country[], search: string, isRTL: boolean, type?: 'ar' | 'en') {
   return useMemo(() => {
     const q = search.trim().toLowerCase();
 
@@ -19,7 +19,7 @@ export function useCountryFilter(countries: NormalizedCountry[], search: string,
       return c.name.toLowerCase().includes(q);
     });
 
-    const map: Record<string, NormalizedCountry[]> = {};
+    const map: Record<string, Country[]> = {};
 
     filtered.forEach(c => {
       // Use the same display logic as the UI

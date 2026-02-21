@@ -10,10 +10,10 @@ const CountryRowComponent = ({ country, contentContainerStyle, onClose, onSelect
         return (<TouchableOpacity style={[styles.row, contentContainerStyle && contentContainerStyle]} onPress={() => {
                 onSelect(country);
                 onClose();
-            }} accessibilityRole="button" accessibilityLabel={`${displayName} +${country.callingCode}`}>
+            }} accessibilityRole="button" accessibilityLabel={`${displayName} +${country.callingCode[0]}`}>
         <Text style={styles.flag}>{flag(country.cca2)}</Text>
         <Text style={styles.name}>{displayName}</Text>
-        <Text style={styles.callingCode}>{`+${country.callingCode}`}</Text>
+        <Text style={styles.callingCode}>{`+${country.callingCode[0]}`}</Text>
       </TouchableOpacity>);
 };
 export const CountryRow = React.memo(CountryRowComponent);

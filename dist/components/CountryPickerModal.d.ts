@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { NormalizedCountry } from '../types';
+import { Country } from '../types';
 type Props = {
     visible: boolean;
     onClose: () => void;
-    onSelect: (item: NormalizedCountry) => void;
+    onSelect: (item: Country) => void;
     /**
      * Controls which label to show for the country name.
      * - 'en'  -> always show englishName (even when app is RTL)
@@ -46,14 +46,32 @@ type Props = {
      * Custom row renderer. When provided, it completely replaces the default row.
      */
     renderRow?: (params: {
-        item: NormalizedCountry;
-        onSelect: (item: NormalizedCountry) => void;
+        item: Country;
+        onSelect: (item: Country) => void;
         onClose: () => void;
     }) => React.ReactElement | null;
     /**
      * Custom section header renderer. When provided, it replaces the default title text.
      */
     renderSectionHeader?: (title: string) => React.ReactElement | null;
+    /**
+     * Whether to enable sticky section headers.
+     */
+    stickySectionHeadersEnabled?: boolean;
+    /**
+     * Whether to show the close (cross) button in the header.
+     * When true, user can dismiss the picker without selecting a country.
+     * Default: true.
+     */
+    showCloseButton?: boolean;
+    /**
+     * Style override for the close button container.
+     */
+    closeButtonStyle?: StyleProp<ViewStyle>;
+    /**
+     * Style override for the close button text (the "×" icon).
+     */
+    closeButtonTextStyle?: StyleProp<TextStyle>;
 };
-export declare const CountryPickerModal: ({ visible, onClose, onSelect, type, searchPlaceholder, title, titleStyle, headerComponent, rowStyle, searchValue, onSearchChange, renderRow, renderSectionHeader, }: Props) => React.JSX.Element;
+export declare const CountryPickerModal: ({ visible, onClose, onSelect, type, searchPlaceholder, title, titleStyle, headerComponent, rowStyle, searchValue, stickySectionHeadersEnabled, onSearchChange, renderRow, renderSectionHeader, showCloseButton, closeButtonStyle, closeButtonTextStyle, }: Props) => React.JSX.Element;
 export {};

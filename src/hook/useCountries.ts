@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import { CountriesMap, Country, NormalizedCountry } from '../types';
+import { CountriesMap, RawCountryData, Country, CountryCode } from '../types';
 
 export function useNormalizedCountries(
   countries: CountriesMap,
   isRTL: boolean,
   type?: 'ar' | 'en',
-): NormalizedCountry[] {
+): Country[] {
   return useMemo(() => {
     return Object.entries(countries ?? {}).map(([cca2, country]) => {
-      const c = country as Country;
+      const c = country as RawCountryData;
 
       let displayName: string;
 
@@ -24,11 +24,11 @@ export function useNormalizedCountries(
       }
 
       return {
-        cca2,
-        callingCode: Array.isArray(c.callingCode) ? c.callingCode[0] ?? '' : '',
+        cca2: cca2 as CountryCode,
+        callingCode: c.callingCode,
         name: displayName,
         englishName: c.name?.common ?? '',
-        rawName: c.name ?? {},
+        currency: c.currency,
       };
     });
   }, [countries, isRTL, type]);

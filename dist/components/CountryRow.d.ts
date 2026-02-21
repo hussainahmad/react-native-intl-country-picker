@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import { NormalizedCountry } from '../types';
+import { Country } from '../types';
 type CountryRowProps = {
-    country: NormalizedCountry;
+    country: Country;
     onClose: () => void;
-    onSelect: (item: NormalizedCountry) => void;
+    onSelect: (item: Country) => void;
     contentContainerStyle?: StyleProp<ViewStyle>;
     /**
      * Controls which label to show for the country name.

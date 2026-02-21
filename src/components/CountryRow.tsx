@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, StyleSheet, I18nManager, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
-import { NormalizedCountry } from '../types';
+import { Country } from '../types';
 import { flag } from '../utill/flag';
 
 type CountryRowProps = {
-  country: NormalizedCountry;
+  country: Country;
   onClose: () => void;
-  onSelect: (item: NormalizedCountry) => void;
+  onSelect: (item: Country) => void;
   contentContainerStyle?: StyleProp<ViewStyle>;
   /**
    * Controls which label to show for the country name.
@@ -31,11 +31,11 @@ const CountryRowComponent = ({ country, contentContainerStyle, onClose, onSelect
           onClose();
         }}
         accessibilityRole="button"
-        accessibilityLabel={`${displayName} +${country.callingCode}`}
+        accessibilityLabel={`${displayName} +${country.callingCode[0]}`}
       >
         <Text style={styles.flag}>{flag(country.cca2)}</Text>
         <Text style={styles.name}>{displayName}</Text>
-        <Text style={styles.callingCode}>{`+${country.callingCode}`}</Text>
+        <Text style={styles.callingCode}>{`+${country.callingCode[0]}`}</Text>
       </TouchableOpacity>
     );
 };

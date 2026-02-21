@@ -1,6 +1,6 @@
 {
   "name": "react-native-intl-country-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native country picker with RTL-friendly Arabic search, dialing-code search, and alphabet index.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,14 +11,15 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run build && npm run lint"
+    "pack:tgz": "npm run build && npm pack",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": ">=17",
     "react-native": ">=0.68"
   },
   "devDependencies": {
+    "@types/google-libphonenumber": "^7.4.30",
     "@types/react": "^19.2.13",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
@@ -34,7 +35,7 @@
     "rtl",
     "arabic"
   ],
-  "author": "Your Name",
+  "author": "Hussain Sherwani",
   "repository": {
     "type": "git",
     "url": "https://github.com/hussainahmad/react-native-intl-country-picker"
@@ -43,5 +44,8 @@
     "url": "https://github.com/hussainahmad/react-native-intl-country-picker/issues"
   },
   "homepage": "https://github.com/hussainahmad/react-native-intl-country-picker#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "google-libphonenumber": "^3.2.44"
+  }
 }

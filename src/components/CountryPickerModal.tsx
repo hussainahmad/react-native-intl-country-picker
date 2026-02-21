@@ -1,16 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { Modal, View, SectionList, I18nManager, StyleSheet, Text, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { Modal, View, SectionList, I18nManager, StyleSheet, Text, StyleProp, TextStyle, ViewStyle, Pressable } from 'react-native';
 import { CountryRow } from './CountryRow';
 import { useNormalizedCountries } from '../hook/useCountries';
 import { useCountryFilter } from '../hook/useCountryFilter';
 import { Countries } from '../data/countries';
-import { NormalizedCountry } from '../types';
+import { Country } from '../types';
 import { Searchbar } from './Searchbar';
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  onSelect: (item: NormalizedCountry) => void;
+  onSelect: (item: Country) => void;
   /**
    * Controls which label to show for the country name.
    * - 'en'  -> always show englishName (even when app is RTL)
@@ -52,14 +52,33 @@ type Props = {
    * Custom row renderer. When provided, it completely replaces the default row.
    */
   renderRow?: (params: {
-    item: NormalizedCountry;
-    onSelect: (item: NormalizedCountry) => void;
+    item: Country;
+    onSelect: (item: Country) => void;
     onClose: () => void;
   }) => React.ReactElement | null;
   /**
    * Custom section header renderer. When provided, it replaces the default title text.
    */
   renderSectionHeader?: (title: string) => React.ReactElement | null;
+  /**
+   * Whether to enable sticky section headers.
+   */
+  stickySectionHeadersEnabled?: boolean;
+  /**
+   * Whether to show the close (cross) button in the header.
+   * When true, user can dismiss the picker without selecting a country.
+   * Default: true.
+   */
+  showCloseButton?: boolean;
+  /**
+   * Style override for the close button container.
+   */
+  closeButtonStyle?: StyleProp<ViewStyle>;
+  /**
+   * Style override for the close button text (the "×" icon).
+   */
+  closeButtonTextStyle?: StyleProp<TextStyle>;
+
 };
 
 export const CountryPickerModal = ({
@@ -73,9 +92,13 @@ export const CountryPickerModal = ({
   headerComponent,
   rowStyle,
   searchValue,
+  stickySectionHeadersEnabled,
   onSearchChange,
   renderRow,
   renderSectionHeader,
+  showCloseButton = true,
+  closeButtonStyle,
+  closeButtonTextStyle,
 }: Props) => {
   const isRTL = I18nManager.isRTL;
   const listRef = useRef<SectionList>(null);
@@ -96,11 +119,19 @@ export const CountryPickerModal = ({
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
-        {headerComponent ?? (title ? <Text style={[styles.title, titleStyle]}>{title}</Text> : null)}
+        <View style={styles.headerRow}>
+          <View style={styles.headerLeft}>{headerComponent ?? (<Text style={[styles.title, titleStyle]}>{title ?? isRTL ? 'اختر البلد' : 'Select Country' }</Text>)}</View>
+          {showCloseButton && (
+            <Pressable style={[styles.closeButton, closeButtonStyle]} onPress={onClose} accessibilityLabel="Close" accessibilityRole="button">
+              <Text style={[styles.closeButtonText, closeButtonTextStyle]}>×</Text>
+            </Pressable>
+          )}
+        </View>
         <Searchbar search={search} setSearch={handleSearchChange} placeholder={searchPlaceholder} />
         <SectionList
           ref={listRef}
           sections={sections}
+          stickySectionHeadersEnabled={stickySectionHeadersEnabled ?? false}
           keyExtractor={item => `${item.cca2}-${item.callingCode}`}
           renderItem={({ item }) =>
             renderRow ? (
@@ -109,7 +140,10 @@ export const CountryPickerModal = ({
               <CountryRow
                 country={item}
                 onClose={onClose}
-                onSelect={onSelect}
+                onSelect={(item)=>{
+                  onSelect(item);
+                  setInternalSearch('')
+                }}
                 type={type}
                 contentContainerStyle={rowStyle}
               />
@@ -119,9 +153,12 @@ export const CountryPickerModal = ({
             renderSectionHeader ? (
               renderSectionHeader(section.title as string)
             ) : (
-              <Text style={styles.sectionHeader}>{section.title}</Text>
+              <View style={styles.sectionHeaderContainer}>
+                <Text style={styles.sectionHeader}>{section.title}</Text>
+              </View>
             )
           }
+          contentContainerStyle={styles.contentContainer}
           // contentContainerStyle={{marginStart: 12, marginEnd:12, borderWidth:1}}
         />
       </View>
@@ -134,16 +171,51 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 60,
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    minHeight: 44,
+  },
+  headerLeft: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   title: {
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: 12,
+  },
+  closeButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginStart: 8,
+  },
+  closeButtonText: {
+    fontSize: 28,
+    fontWeight: '300',
+    color: '#333',
+    lineHeight: 32,
+  },
+  sectionHeaderContainer: {
+    backgroundColor: '#e8e8e8',
+    borderRadius: 8,
+    marginHorizontal: 12,
+    marginVertical: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   sectionHeader: {
     fontSize: 14,
-    fontWeight: '500',
-    paddingHorizontal: 16,
-    paddingVertical: 4,
+    fontWeight: '600',
+    color: '#333',
+    textAlign: 'left',
   },
+  contentContainer: {
+    paddingVertical: 12,
+  }
 });
